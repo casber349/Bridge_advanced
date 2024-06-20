@@ -26,15 +26,15 @@ int win(int trick_required, int trick, int suit, int level, bool vulnerable, boo
 	if (!Doubled) {
 		if (!Redoubled) {
 			switch (suit) {	//Basic score
-			case 1: case 2:		//minor(C, D)
-				score = level * 20;
-				break;
-			case 3: case 4:		//Major(H, S)
-				score = level * 30;
-				break;
-			case 5:					//NT
-				score = level * 30 + 10;
-				break;
+				case 1: case 2:		//minor(C, D)
+					score = level * 20;
+					break;
+				case 3: case 4:		//Major(H, S)
+					score = level * 30;
+					break;
+				case 5:					//NT
+					score = level * 30 + 10;
+					break;
 			}
 
 			if (score >= 100) {	//Game
@@ -67,25 +67,25 @@ int win(int trick_required, int trick, int suit, int level, bool vulnerable, boo
 			}
 
 			switch (suit) {	//Overtrick score
-			case 1: case 2:		//minor(C, D)
-				score += (trick - trick_required) * 20;
-				break;
-			case 3: case 4: case 5:		//Major(H, S), NT
-				score += (trick - trick_required) * 30;
-				break;
+				case 1: case 2:		//minor(C, D)
+					score += (trick - trick_required) * 20;
+					break;
+				case 3: case 4: case 5:		//Major(H, S), NT
+					score += (trick - trick_required) * 30;
+					break;
 			}
 		}
 		else {	//Redoubled
 			switch (suit) {	//Basic score
-			case 1: case 2:		//minor(C, D)
-				score = level * 20;
-				break;
-			case 3: case 4:		//Major(H, S)
-				score = level * 30;
-				break;
-			case 5:					//NT
-				score = level * 30 + 10;
-				break;
+				case 1: case 2:		//minor(C, D)
+					score = level * 20;
+					break;
+				case 3: case 4:		//Major(H, S)
+					score = level * 30;
+					break;
+				case 5:					//NT
+					score = level * 30 + 10;
+					break;
 			}
 
 			score *= 4;	//Redouble: Basic score * 4
@@ -131,15 +131,15 @@ int win(int trick_required, int trick, int suit, int level, bool vulnerable, boo
 	}
 	else {	//Doubled
 		switch (suit) {	//Basic score
-		case 1: case 2:		//minor(C, D)
-			score = level * 20;
-			break;
-		case 3: case 4:		//Major(H, S)
-			score = level * 30;
-			break;
-		case 5:					//NT
-			score = level * 30 + 10;
-			break;
+			case 1: case 2:		//minor(C, D)
+				score = level * 20;
+				break;
+			case 3: case 4:		//Major(H, S)
+				score = level * 30;
+				break;
+			case 5:					//NT
+				score = level * 30 + 10;
+				break;
 		}
 
 		score *= 2;	//Double: Basic score * 2
@@ -487,6 +487,7 @@ class player {
 
 int main() {	// in this project, we use "player" as main objects
 	initializing:
+	system("cls");
 	srand(time(NULL));
 	vector <bool> used(52, false);
 
@@ -539,43 +540,135 @@ int main() {	// in this project, we use "player" as main objects
 	switch (dealer) {
 		case 0:
 			which_player = &south;
-			cout << "Dealer: South" << endl;
 			break;
 		case 1:
 			which_player = &west;
-			cout << "Dealer: West" << endl;
 			break;
 		case 2:
 			which_player = &north;
-			cout << "Dealer: North" << endl;
 			break;
 		case 3:
 			which_player = &east;
-			cout << "Dealer: East" << endl;
 			break;
 	}
 
-	switch (v) {
-		case 0:
-			cout << "Vulnerable: none" << endl;
-			break;
-		case 1:
-			cout << "Vulnerable: NS" << endl;
-			break;
-		case 2:
-			cout << "Vulnerable: EW" << endl;
-			break;
-		case 3:
-			cout << "Vulnerable: both" << endl;
-			break;
-	}
+	
 
 	static int highest_bid_id = -1;
 	static int trick_required = 0;
 	static int trump = 0;
 	static int passes = 0;
 	bool doubled = false, redoubled = false;
+	vector<vector<string>> bid_history;
+	vector<string> bid_history_initialize;
+	static int bid_history_index = 0;
+	for (int j = 0; j < 4; j++) {
+		bid_history_initialize.push_back(which_player->name);
+		bid_history.push_back(bid_history_initialize);
+		if (which_player == &south) {
+			which_player = &west;	// next player
+		}
+		else if (which_player == &west) {
+			which_player = &north;	// next player
+		}
+		else if (which_player == &north) {
+			which_player = &east;	// next player
+		}
+		else if (which_player == &east) {
+			which_player = &south;	// next player
+		}
+		bid_history_initialize.clear();
+	}
+	
 	while (1) {
+		switch (dealer) {
+			case 0:
+				cout << "Dealer: South" << endl;
+				break;
+			case 1:
+				cout << "Dealer: West" << endl;
+				break;
+			case 2:
+				cout << "Dealer: North" << endl;
+				break;
+			case 3:
+				cout << "Dealer: East" << endl;
+				break;
+		}
+
+		switch (v) {
+			case 0:
+				cout << "Vulnerable: none" << endl;
+				break;
+			case 1:
+				cout << "Vulnerable: NS" << endl;
+				break;
+			case 2:
+				cout << "Vulnerable: EW" << endl;
+				break;
+			case 3:
+				cout << "Vulnerable: both" << endl;
+				break;
+		}
+
+		cout << endl;
+
+		for (int j = 0; j < 4; j++) {
+			for (int k = 0; k < bid_history[j].size(); k++) {
+				if (k) {
+					if (bid_history[j][k] == "Pass") {
+						cout << bid_history[j][k] << "     ";
+					}
+					else if (bid_history[j][k] == "Double") {
+						setTextColor(CYAN);
+						cout << bid_history[j][k] << "   ";
+						resetTextColor();
+					}
+					else if (bid_history[j][k] == "Redouble") {
+						setTextColor(CYAN);
+						cout << bid_history[j][k] << " ";
+						resetTextColor();
+					}
+					switch (bid_history[j][k][1]) {
+						case 'C':
+							setTextColor(GREEN);
+							cout << bid_history[j][k] << "       ";
+							resetTextColor();
+							break;
+						case 'D':
+							setTextColor(MAGENTA);
+							cout << bid_history[j][k] << "       ";
+							resetTextColor();
+							break;
+						case 'H':
+							setTextColor(RED);
+							cout << bid_history[j][k] << "       ";
+							resetTextColor();
+							break;
+						case 'S':
+							setTextColor(BLUE);
+							cout << bid_history[j][k] << "       ";
+							resetTextColor();
+							break;
+						case 'N':
+							resetTextColor();
+							cout << bid_history[j][k] << "      ";
+							break;
+					}
+				 }
+				else {
+					cout << bid_history[j][k] << ": ";
+					if ((bid_history[j][k] == "West") || (bid_history[j][k] == "East")) {
+						cout << " ";
+					}
+				}
+			}
+			cout << endl;
+		}
+		cout << endl;
+		
+
+
 		which_player->print_name();
 		cout << ":" << endl;
 
@@ -585,7 +678,7 @@ int main() {	// in this project, we use "player" as main objects
 
 		string input_bid;
 		int input_bid_id = -1;
-	enter_bid:
+		enter_bid:
 		cout << "Enter your bid: ";
 		cin >> input_bid;
 		cout << endl;
@@ -772,15 +865,23 @@ int main() {	// in this project, we use "player" as main objects
 		else {	// Pass
 			passes++;
 			if ((highest_bid_id == -1) && (passes == 4)) {
+				bid_history[bid_history_index % 4].push_back(input_bid);
+				passes = 0;
+				bid_history_index = 0;
 				cout << "All player passed, redeal cards to start a new game." << endl;
+				cout << "Press Enter to continue";
+				cin.get();
+				cin.get();
 				goto initializing;
 			}
 			else if ((highest_bid_id >= 0) && (passes == 3)) {
+				bid_history[bid_history_index % 4].push_back(input_bid);
 				goto start_to_play;
 			}
 		}
 
-
+		// valid bid
+		bid_history[bid_history_index % 4].push_back(input_bid);
 		if (which_player == &south) {
 			which_player = &west;	// next player
 		}
@@ -793,12 +894,14 @@ int main() {	// in this project, we use "player" as main objects
 		else if (which_player == &east) {
 			which_player = &south;	// next player
 		}
+		bid_history_index++;
+		system("cls");
 	}
 
 
 
 	start_to_play:
-	declarer->print_contract(highest_bid_id, doubled, redoubled);
+	system("cls");
 	south.how_many_cards_in_each_suit();
 	west.how_many_cards_in_each_suit();
 	north.how_many_cards_in_each_suit();
@@ -823,17 +926,117 @@ int main() {	// in this project, we use "player" as main objects
 
 	int NS_trick = 0, EW_trick = 0;
 	for (int round = 1; round <= 13; round++) {
-		cout << "NS trick: " << NS_trick << endl;
-		cout << "EW trick: " << EW_trick << endl;
 		int suit_in_this_round = 0;
 		int highest_rank_in_this_round = 0;
 		typedef struct played_card {
-			int suit;
-			int rank;
-			string from_who;
+			int suit = 0;
+			int rank = 0;
+			string from_who = "N/A";
+			string play_input = "N/A";
 		};
 		played_card played_cards[4];
+
 		for (int seat = 1; seat <= 4; seat++) {
+			declarer->print_contract(highest_bid_id, doubled, redoubled);
+			cout << endl;
+
+			switch (v) {
+				case 0:
+					cout << "Vulnerable: none" << endl;
+					break;
+				case 1:
+					cout << "Vulnerable: NS" << endl;
+					break;
+				case 2:
+					cout << "Vulnerable: EW" << endl;
+					break;
+				case 3:
+					cout << "Vulnerable: both" << endl;
+					break;
+			}
+
+			cout << endl;
+
+			for (int j = 0; j < 4; j++) {
+				for (int k = 0; k < bid_history[j].size(); k++) {
+					if (k) {
+						if (bid_history[j][k] == "Pass") {
+							cout << bid_history[j][k] << "     ";
+						}
+						else if (bid_history[j][k] == "Double") {
+							setTextColor(CYAN);
+							cout << bid_history[j][k] << "   ";
+							resetTextColor();
+						}
+						else if (bid_history[j][k] == "Redouble") {
+							setTextColor(CYAN);
+							cout << bid_history[j][k] << " ";
+							resetTextColor();
+						}
+						switch (bid_history[j][k][1]) {
+							case 'C':
+								setTextColor(GREEN);
+								cout << bid_history[j][k] << "       ";
+								resetTextColor();
+								break;
+							case 'D':
+								setTextColor(MAGENTA);
+								cout << bid_history[j][k] << "       ";
+								resetTextColor();
+								break;
+							case 'H':
+								setTextColor(RED);
+								cout << bid_history[j][k] << "       ";
+								resetTextColor();
+								break;
+							case 'S':
+								setTextColor(BLUE);
+								cout << bid_history[j][k] << "       ";
+								resetTextColor();
+								break;
+							case 'N':
+								resetTextColor();
+								cout << bid_history[j][k] << "      ";
+								break;
+						}
+					}
+					else {
+						cout << bid_history[j][k] << ": ";
+						if ((bid_history[j][k] == "West") || (bid_history[j][k] == "East")) {
+							cout << " ";
+						}
+					}
+				}
+				cout << endl;
+			}
+			cout << endl;
+
+			cout << "NS trick: " << NS_trick << endl;
+			cout << "EW trick: " << EW_trick << endl;
+			cout << endl;
+
+
+			for (int j = 0; j < seat - 1; j++) {
+				cout << played_cards[j].from_who << " played: ";
+				switch (played_cards[j].suit) {
+					case club:
+						setTextColor(GREEN);
+						break;
+					case diamond:
+						setTextColor(MAGENTA);
+						break;
+					case heart:
+						setTextColor(RED);
+						break;
+					case spade:
+						setTextColor(BLUE);
+						break;
+				}
+				cout << played_cards[j].play_input;
+				resetTextColor();
+				cout << endl;
+			}
+
 			if ((round != 1) || (seat != 1)) {	// Dummy's card face up
 				if (which_player->name == dummy->name) {
 					cout << "(Dummy's turn)" << endl;
@@ -933,6 +1136,7 @@ int main() {	// in this project, we use "player" as main objects
 			}
 
 			// valid play
+			played_cards[seat - 1].play_input = card_to_play;
 			if (it->is_trump) {
 				played_cards[seat - 1].rank += 13;
 			}
@@ -955,6 +1159,8 @@ int main() {	// in this project, we use "player" as main objects
 			else if (which_player == &east) {
 				which_player = &south;	// next player
 			}
+
+			system("cls");
 		}
 
 		played_card winning_card;
@@ -988,6 +1194,26 @@ int main() {	// in this project, we use "player" as main objects
 	}
 
 	// hand over
+	declarer->print_contract(highest_bid_id, doubled, redoubled);
+	cout << endl;
+
+	switch (v) {
+		case 0:
+			cout << "Vulnerable: none" << endl;
+			break;
+		case 1:
+			cout << "Vulnerable: NS" << endl;
+			break;
+		case 2:
+			cout << "Vulnerable: EW" << endl;
+			break;
+		case 3:
+			cout << "Vulnerable: both" << endl;
+			break;
+	}
+
+	cout << endl;
+
 	cout << "NS trick: " << NS_trick << endl;
 	cout << "EW trick: " << EW_trick << endl;
 
@@ -1008,5 +1234,8 @@ int main() {	// in this project, we use "player" as main objects
 		}
 	}
 
+	cout << "Press Enter to quit";
+	cin.get();
+	cin.get();
 	return 0;
 }
