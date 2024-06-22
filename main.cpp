@@ -348,7 +348,7 @@ class player {
 						cout << "A";
 						break;
 					default:
-						cout << hand[j].rank;;
+						cout << hand[j].rank;
 						break;
 				}
 				resetTextColor();
@@ -709,6 +709,10 @@ int main() {	// in this project, we use "player" as main objects
 					}
 					switch (input_bid[1]) {
 						case 'C':
+							if (input_bid.size() != 2) {
+								cout << endl << "Invalid bid!" << endl;
+								goto enter_bid;
+							}
 							input_bid_id = ((int)input_bid[0] - 48 - 1) * 5;
 							// valid input (but not valid bid)
 							if (input_bid_id <= highest_bid_id) {
@@ -716,13 +720,21 @@ int main() {	// in this project, we use "player" as main objects
 								goto enter_bid;
 							}
 							trump = club;
-							which_player->club_bidden = true;
 							if (!partner->club_bidden) {
+								which_player->club_bidden = true;
 								declarer = which_player;
-								dummy = partner;
+								dummy = partner;								
+							}
+							else {
+								declarer = partner;
+								dummy = which_player;
 							}
 							break;
 						case 'D':
+							if (input_bid.size() != 2) {
+								cout << endl << "Invalid bid!" << endl;
+								goto enter_bid;
+							}
 							input_bid_id = ((int)input_bid[0] - 48 - 1) * 5 + 1;
 							// valid input (but not valid bid)
 							if (input_bid_id <= highest_bid_id) {
@@ -730,13 +742,21 @@ int main() {	// in this project, we use "player" as main objects
 								goto enter_bid;
 							}
 							trump = diamond;
-							which_player->diamond_bidden = true;
 							if (!partner->diamond_bidden) {
+								which_player->diamond_bidden = true;
 								declarer = which_player;
 								dummy = partner;
 							}
+							else {
+								declarer = partner;
+								dummy = which_player;
+							}
 							break;
 						case 'H':
+							if (input_bid.size() != 2) {
+								cout << endl << "Invalid bid!" << endl;
+								goto enter_bid;
+							}
 							input_bid_id = ((int)input_bid[0] - 48 - 1) * 5 + 2;
 							// valid input (but not valid bid)
 							if (input_bid_id <= highest_bid_id) {
@@ -744,13 +764,21 @@ int main() {	// in this project, we use "player" as main objects
 								goto enter_bid;
 							}
 							trump = heart;
-							which_player->heart_bidden = true;
 							if (!partner->heart_bidden) {
+								which_player->heart_bidden = true;
 								declarer = which_player;
 								dummy = partner;
 							}
+							else {
+								declarer = partner;
+								dummy = which_player;
+							}
 							break;
 						case 'S':
+							if (input_bid.size() != 2) {
+								cout << endl << "Invalid bid!" << endl;
+								goto enter_bid;
+							}
 							input_bid_id = ((int)input_bid[0] - 48 - 1) * 5 + 3;
 							// valid input (but not valid bid)
 							if (input_bid_id <= highest_bid_id) {
@@ -758,14 +786,22 @@ int main() {	// in this project, we use "player" as main objects
 								goto enter_bid;
 							}
 							trump = spade;
-							which_player->spade_bidden = true;
 							if (!partner->spade_bidden) {
+								which_player->spade_bidden = true;
 								declarer = which_player;
 								dummy = partner;
+							}
+							else {
+								declarer = partner;
+								dummy = which_player;
 							}
 							break;
 						case 'N':
 							if (input_bid[2] == 'T') {
+								if (input_bid.size() != 3) {
+									cout << endl << "Invalid bid!" << endl;
+									goto enter_bid;
+								}
 								input_bid_id = ((int)input_bid[0] - 48 - 1) * 5 + 4;
 								// valid input (but not valid bid)
 								if (input_bid_id <= highest_bid_id) {
@@ -773,10 +809,14 @@ int main() {	// in this project, we use "player" as main objects
 									goto enter_bid;
 								}
 								trump = no_trump;
-								which_player->no_trump_bidden = true;
 								if (!partner->no_trump_bidden) {
+									which_player->no_trump_bidden = true;
 									declarer = which_player;
 									dummy = partner;
+								}
+								else {
+									declarer = partner;
+									dummy = which_player;
 								}
 								break;
 							}
@@ -1091,19 +1131,39 @@ int main() {	// in this project, we use "player" as main objects
 			}
 			switch (card_to_play[1]) {
 				case 'J':
+					if (card_to_play.size() != 2) {
+						cout << endl << "Invalid play!" << endl;
+						goto play;
+					}
 					played_cards[seat - 1].rank = jack;
 					break;
 				case 'Q':
+					if (card_to_play.size() != 2) {
+						cout << endl << "Invalid play!" << endl;
+						goto play;
+					}
 					played_cards[seat - 1].rank = queen;
 					break;
 				case 'K':
+					if (card_to_play.size() != 2) {
+						cout << endl << "Invalid play!" << endl;
+						goto play;
+					}
 					played_cards[seat - 1].rank = king;
 					break;
 				case 'A':
+					if (card_to_play.size() != 2) {
+						cout << endl << "Invalid play!" << endl;
+						goto play;
+					}
 					played_cards[seat - 1].rank = ace;
 					break;
 				case '1':	// ten
 					if (card_to_play[2] == '0') {
+						if (card_to_play.size() != 3) {
+							cout << endl << "Invalid play!" << endl;
+							goto play;
+						}
 						played_cards[seat - 1].rank = 10;
 						break;
 					}
@@ -1112,6 +1172,10 @@ int main() {	// in this project, we use "player" as main objects
 						goto play;
 					}
 				case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+					if (card_to_play.size() != 2) {
+						cout << endl << "Invalid play!" << endl;
+						goto play;
+					}
 					played_cards[seat - 1].rank = (int)card_to_play[1] - 48;
 					break;
 				default:
